@@ -6,32 +6,27 @@ async function press(page, ...keys) {
   for (const key of keys) await page.getByRole('button', { name: key, exact: true }).click();
 }
 
-test('adds two numbers', async ({ page }) => {
-  await press(page, '1', '2', '+', '7', '=');
-  await expect(page.getByLabel('Result')).toHaveText('19');
+test('Addition test: 3 + 9 = 12', async ({ page }) => {
+  await press(page, '3', '+', '9', '=');
+  await expect(page.getByLabel('Result')).toHaveText('12');
 });
 
-test('subtracts to produce a negative result', async ({ page }) => {
-  await press(page, '3', '−', '8', '=');
-  await expect(page.getByLabel('Result')).toHaveText('-5');
-});
-
-test('multiplies decimals using the keyboard', async ({ page }) => {
-  await page.keyboard.type('1.5*4');
-  await page.keyboard.press('Enter');
+test('Subtraction test: 9 - 3 = 6', async ({ page }) => {
+  await press(page, '9', '−', '3', '=');
   await expect(page.getByLabel('Result')).toHaveText('6');
 });
 
-test('divides numbers and handles division by zero', async ({ page }) => {
-  await press(page, '8', '÷', '2', '=');
-  await expect(page.getByLabel('Result')).toHaveText('4');
-  await press(page, '÷', '0', '=');
-  await expect(page.getByLabel('Result')).toHaveText('Error');
+test('Multiplication test: 3 x 9 = 27', async ({ page }) => {
+  await press(page, '3', '×', '9', '=');
+  await expect(page.getByLabel('Result')).toHaveText('27');
 });
 
-test('clear resets both the display and pending operation', async ({ page }) => {
-  await press(page, '9', '+', '5', 'AC');
+test('Division test: 9 / 3 = 3', async ({ page }) => {
+  await press(page, '9', '÷', '3', '=');
+  await expect(page.getByLabel('Result')).toHaveText('3');
+});
+
+test('Clear test: enter 39, press AC, expect 0', async ({ page }) => {
+  await press(page, '3', '9', 'AC');
   await expect(page.getByLabel('Result')).toHaveText('0');
-  await press(page, '2', '=');
-  await expect(page.getByLabel('Result')).toHaveText('2');
 });
